@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Build outputs
+build/
+dist/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ML models (optional - remove if you want to commit models)
+ml-service/models/*.pkl
+ml-service/models/*.json
+
+# Database
+*.db
+*.sqlite
+
+# Temporary files
+tmp/
+temp/
