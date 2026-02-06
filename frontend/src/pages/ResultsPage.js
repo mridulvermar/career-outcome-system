@@ -59,10 +59,6 @@ function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
 
-  useEffect(() => {
-    fetchAnalysis();
-  }, [fetchAnalysis]);
-
   const fetchAnalysis = React.useCallback(async () => {
     try {
       const response = await analysisAPI.getById(id);
@@ -74,6 +70,10 @@ function ResultsPage() {
       setLoading(false);
     }
   }, [id, navigate]);
+
+  useEffect(() => {
+    fetchAnalysis();
+  }, [fetchAnalysis]);
 
   const handleDownloadReport = async () => {
     setDownloading(true);
