@@ -39,7 +39,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   RadarChart,
   PolarGrid,
@@ -62,9 +61,9 @@ function ResultsPage() {
 
   useEffect(() => {
     fetchAnalysis();
-  }, [id]);
+  }, [fetchAnalysis]);
 
-  const fetchAnalysis = async () => {
+  const fetchAnalysis = React.useCallback(async () => {
     try {
       const response = await analysisAPI.getById(id);
       setAnalysis(response.data.data);
@@ -74,7 +73,7 @@ function ResultsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, navigate]);
 
   const handleDownloadReport = async () => {
     setDownloading(true);
@@ -306,8 +305,8 @@ function ResultsPage() {
                           item.importance === 'Critical'
                             ? 'error'
                             : item.importance === 'Important'
-                            ? 'warning'
-                            : 'info'
+                              ? 'warning'
+                              : 'info'
                         }
                       />
                     </ListItemIcon>
