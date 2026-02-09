@@ -50,7 +50,6 @@ import {
 } from 'recharts';
 import { analysisAPI } from '../services/api';
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 
 const MotionContainer = motion(Container);

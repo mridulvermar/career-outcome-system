@@ -38,8 +38,6 @@ function AuthPage() {
   const navigate = useNavigate();
   const { login, register } = useAuth();
 
-  const width = window.innerWidth;
-
   const handleChange = (e) => {
     setFormData({
       ...formData,

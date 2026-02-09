@@ -13,11 +13,8 @@ import {
   CircularProgress,
   Alert,
   Paper,
-  Fade,
 } from '@mui/material';
 import {
-  Add,
-  Visibility,
   Delete,
   TrendingUp,
   Assessment,
@@ -27,7 +24,6 @@ import {
 import { analysisAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 
 const MotionContainer = motion(Container);
