@@ -11,19 +11,7 @@ import Dashboard from './pages/Dashboard';
 import AnalysisForm from './pages/AnalysisForm';
 import ResultsPage from './pages/ResultsPage';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#667eea',
-    },
-    secondary: {
-      main: '#764ba2',
-    },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-  },
-});
+import theme from './theme';
 
 // Protected Route Component
 function ProtectedRoute({ children }) {

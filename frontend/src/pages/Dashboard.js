@@ -13,6 +13,7 @@ import {
   CircularProgress,
   Alert,
   Paper,
+  Fade,
 } from '@mui/material';
 import {
   Add,
@@ -21,11 +22,16 @@ import {
   TrendingUp,
   Assessment,
   History,
+  RocketLaunch,
 } from '@mui/icons-material';
 import { analysisAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
+import { motion } from 'framer-motion';
+
+const MotionContainer = motion(Container);
+const MotionCard = motion(Card);
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -47,12 +53,12 @@ function Dashboard() {
       const response = await analysisAPI.getHistory({ limit: 20 });
       const data = response.data.data;
       setAnalyses(data);
-      
+
       // Calculate stats
       const total = data.length;
       const highConfidence = data.filter(a => a.prediction.confidence === 'High').length;
       const avgSkillMatch = data.reduce((sum, a) => sum + a.skillGap.overallMatch, 0) / (total || 1);
-      
+
       setStats({
         total,
         highConfidence,
@@ -77,151 +83,202 @@ function Dashboard() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
+
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <MotionContainer
+      maxWidth="lg"
+      sx={{ mt: 4, mb: 4 }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Header */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={5}>
         <Box>
-          <Typography variant="h4" gutterBottom>
-            Welcome, {user?.name}!
+          <Typography variant="h3" gutterBottom sx={{ background: 'linear-gradient(45deg, #6C63FF 30%, #2EC4B6 90%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Hello, {user?.name} 👋
           </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Track your career analysis history and insights
+          <Typography variant="h6" color="text.secondary" fontWeight="400">
+            Ready to shape your future today?
           </Typography>
         </Box>
         <Box>
           <Button
             variant="contained"
-            startIcon={<Add />}
+            color="primary"
+            size="large"
+            startIcon={<RocketLaunch />}
             onClick={() => navigate('/analyze')}
-            sx={{ mr: 2 }}
+            sx={{ mr: 2, px: 4, py: 1.5 }}
           >
             New Analysis
           </Button>
-          <Button variant="outlined" onClick={logout}>
+          <Button variant="outlined" color="inherit" onClick={logout} sx={{ py: 1.5 }}>
             Logout
           </Button>
         </Box>
       </Box>
 
       {/* Stats Cards */}
-      <Grid container spacing={3} mb={4}>
+      <Grid container spacing={3} mb={6}>
         <Grid item xs={12} md={4}>
-          <Paper elevation={2} sx={{ p: 3, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Box>
-                <Typography variant="h3">{stats.total}</Typography>
-                <Typography variant="body1">Total Analyses</Typography>
+          <motion.div variants={itemVariants}>
+            <Paper elevation={0} sx={{ p: 3, borderRadius: 4, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', overflow: 'hidden', position: 'relative' }}>
+              <Box position="absolute" right={-20} top={-20} sx={{ opacity: 0.1 }}>
+                <Assessment sx={{ fontSize: 150 }} />
               </Box>
-              <Assessment sx={{ fontSize: 60, opacity: 0.7 }} />
-            </Box>
-          </Paper>
+              <Box display="flex" flexDirection="column" position="relative" zIndex={1}>
+                <Typography variant="h2" fontWeight="800">{stats.total}</Typography>
+                <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>Total Analyses</Typography>
+              </Box>
+            </Paper>
+          </motion.div>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Paper elevation={2} sx={{ p: 3, background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white' }}>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Box>
-                <Typography variant="h3">{stats.highConfidence}</Typography>
-                <Typography variant="body1">High Confidence</Typography>
+          <motion.div variants={itemVariants}>
+            <Paper elevation={0} sx={{ p: 3, borderRadius: 4, background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white', overflow: 'hidden', position: 'relative' }}>
+              <Box position="absolute" right={-20} top={-20} sx={{ opacity: 0.1 }}>
+                <TrendingUp sx={{ fontSize: 150 }} />
               </Box>
-              <TrendingUp sx={{ fontSize: 60, opacity: 0.7 }} />
-            </Box>
-          </Paper>
+              <Box display="flex" flexDirection="column" position="relative" zIndex={1}>
+                <Typography variant="h2" fontWeight="800">{stats.highConfidence}</Typography>
+                <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>High Confidence</Typography>
+              </Box>
+            </Paper>
+          </motion.div>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Paper elevation={2} sx={{ p: 3, background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white' }}>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Box>
-                <Typography variant="h3">{stats.avgSkillMatch}%</Typography>
-                <Typography variant="body1">Avg Skill Match</Typography>
+          <motion.div variants={itemVariants}>
+            <Paper elevation={0} sx={{ p: 3, borderRadius: 4, background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white', overflow: 'hidden', position: 'relative' }}>
+              <Box position="absolute" right={-20} top={-20} sx={{ opacity: 0.1 }}>
+                <History sx={{ fontSize: 150 }} />
               </Box>
-              <History sx={{ fontSize: 60, opacity: 0.7 }} />
-            </Box>
-          </Paper>
+              <Box display="flex" flexDirection="column" position="relative" zIndex={1}>
+                <Typography variant="h2" fontWeight="800">{stats.avgSkillMatch}%</Typography>
+                <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>Avg Skill Match</Typography>
+              </Box>
+            </Paper>
+          </motion.div>
         </Grid>
       </Grid>
 
       {/* Analysis History */}
-      <Typography variant="h5" gutterBottom>
-        Analysis History
-      </Typography>
+      <Box display="flex" alignItems="center" mb={3}>
+        <History sx={{ mr: 1, color: 'text.secondary' }} />
+        <Typography variant="h5" fontWeight="700">
+          Recent Analyses
+        </Typography>
+      </Box>
 
       {loading ? (
-        <Box display="flex" justifyContent="center" p={4}>
-          <CircularProgress />
+        <Box display="flex" justifyContent="center" p={8}>
+          <CircularProgress size={60} thickness={4} />
         </Box>
       ) : analyses.length === 0 ? (
-        <Alert severity="info">
-          No analyses yet. Click "New Analysis" to get started!
-        </Alert>
+        <motion.div variants={itemVariants}>
+          <Alert severity="info" sx={{ borderRadius: 3, p: 2 }}>
+            No analyses found. Start your first career analysis now!
+          </Alert>
+        </motion.div>
       ) : (
         <Grid container spacing={3}>
           {analyses.map((analysis) => (
             <Grid item xs={12} md={6} lg={4} key={analysis._id}>
-              <Card elevation={2} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <CardContent sx={{ flexGrow: 1 }}>
+              <MotionCard
+                variants={itemVariants}
+                layout
+                whileHover={{ y: -8, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+                sx={{ height: '100%', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.6)' }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
                   <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
-                    <Typography variant="h6" component="div">
-                      {analysis.prediction.careerRole}
-                    </Typography>
                     <Chip
-                      label={analysis.prediction.confidence}
+                      label={analysis.prediction.careerRole}
+                      color="primary"
+                      variant="outlined"
+                      sx={{ fontWeight: 'bold', fontSize: '0.9rem', borderColor: 'primary.light' }}
+                    />
+                    <IconButton
                       size="small"
-                      color={
-                        analysis.prediction.confidence === 'High'
-                          ? 'success'
-                          : analysis.prediction.confidence === 'Medium'
-                          ? 'warning'
-                          : 'default'
-                      }
+                      sx={{ color: 'text.disabled', '&:hover': { color: 'error.main' } }}
+                      onClick={() => handleDelete(analysis._id)}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Box>
+
+                  <Typography variant="h4" gutterBottom fontWeight="700" color="text.primary">
+                    {(analysis.prediction.probability * 100).toFixed(0)}%
+                    <Typography component="span" variant="body2" color="text.secondary" ml={1}>
+                      Probability
+                    </Typography>
+                  </Typography>
+
+                  <Box display="flex" gap={1} flexWrap="wrap" mb={3}>
+                    <Chip
+                      label={analysis.prediction.confidence + " Confidence"}
+                      size="small"
+                      sx={{
+                        bgcolor: analysis.prediction.confidence === 'High' ? 'success.light' : 'warning.light',
+                        color: analysis.prediction.confidence === 'High' ? 'success.dark' : 'warning.dark',
+                        fontWeight: 'bold'
+                      }}
+                    />
+                    <Chip
+                      label={`${analysis.skillGap.overallMatch}% Match`}
+                      size="small"
+                      sx={{ bgcolor: 'secondary.light', color: 'secondary.dark', fontWeight: 'bold' }}
                     />
                   </Box>
 
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    {analysis.inputData.degree} • {analysis.inputData.experience} years exp
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <Assessment sx={{ fontSize: 16, mr: 1, opacity: 0.7 }} />
+                    {analysis.inputData.degree} • {analysis.inputData.experience}y Exp
                   </Typography>
-
-                  <Box mt={2}>
-                    <Typography variant="body2" color="text.secondary">
-                      Probability: {(analysis.prediction.probability * 100).toFixed(1)}%
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Skill Match: {analysis.skillGap.overallMatch}%
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Avg Salary: Rs.{analysis.prediction.salaryRange.average.toLocaleString()}
-                    </Typography>
-                  </Box>
-
-                  <Box mt={2}>
-                    <Typography variant="caption" color="text.secondary">
-                      {format(new Date(analysis.createdAt), 'PPp')}
-                    </Typography>
-                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                    <TrendingUp sx={{ fontSize: 16, mr: 1, opacity: 0.7 }} />
+                    Max: Rs.{analysis.prediction.salaryRange.max.toLocaleString()}
+                  </Typography>
                 </CardContent>
 
-                <Box p={2} display="flex" justifyContent="space-between">
+                <Box p={2} pt={0}>
                   <Button
-                    size="small"
-                    startIcon={<Visibility />}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
                     onClick={() => navigate(`/results/${analysis._id}`)}
+                    sx={{ borderRadius: 3, py: 1, background: 'linear-gradient(45deg, #6C63FF 30%, #8F89FF 90%)' }}
                   >
-                    View Details
+                    View Report
                   </Button>
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => handleDelete(analysis._id)}
-                  >
-                    <Delete />
-                  </IconButton>
                 </Box>
-              </Card>
+              </MotionCard>
             </Grid>
           ))}
         </Grid>
       )}
-    </Container>
+    </MotionContainer>
   );
 }
 

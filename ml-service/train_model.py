@@ -99,6 +99,9 @@ def train_model():
         skills_df
     ], axis=1)
     
+    # Ensure all column names are strings to avoid TypeError during fit
+    X.columns = [str(c) for c in X.columns]
+    
     # Encode target
     le_role = LabelEncoder()
     y = le_role.fit_transform(df['career_role'])
@@ -131,11 +134,21 @@ def train_model():
         for skills_list in role_data['skills']:
             all_skills.extend(skills_list)
         skill_counts = pd.Series(all_skills).value_counts()
-        skill_role_mapping[role] = skill_counts.head(10).to_dict()
+        # Convert numpy types to python native types for JSON serialization
+        # Keys (skills) might be numpy strings, values (counts) are numpy ints
+        skill_role_mapping[str(role)] = {str(k): int(v) for k, v in skill_counts.head(10).items()}
     
-    with open('models/skill_role_mapping.json', 'w') as f:
-        json.dump(skill_role_mapping, f, indent=2)
-    
+    try:
+        with open('models/skill_role_mapping.json', 'w') as f:
+            json.dump(skill_role_mapping, f, indent=2)
+    except Exception as e:
+        print(f"ERROR dumping JSON: {e}")
+        import traceback
+        traceback.print_exc()
+        # diverse fallback
+        with open('models/skill_role_mapping_str.json', 'w') as f:
+             f.write(str(skill_role_mapping))
+
     print("Model training complete!")
     return model, le_degree, le_role, mlb_skills
 

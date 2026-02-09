@@ -63,4 +63,13 @@ export const analysisAPI = {
   },
 };
 
+// Resume APIs
+export const resumeAPI = {
+  upload: (formData) => api.post('/resume/parse', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+};
+
 export default api;
