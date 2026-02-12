@@ -71,5 +71,9 @@ export const resumeAPI = {
     },
   }),
 };
+export const sendMessageToBot = async (message, token, analysisContext = null) => {
+  const response = await api.post('/chat', { message, analysisContext });
+  return response.data;
+};
 
 export default api;

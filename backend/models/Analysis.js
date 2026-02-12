@@ -6,7 +6,7 @@ const analysisSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  
+
   // Input Data
   inputData: {
     degree: {
@@ -32,7 +32,7 @@ const analysisSchema = new mongoose.Schema({
       type: String
     }]
   },
-  
+
   // Prediction Results
   prediction: {
     careerRole: {
@@ -65,7 +65,7 @@ const analysisSchema = new mongoose.Schema({
       matchScore: Number
     }]
   },
-  
+
   // Skill Gap Analysis
   skillGap: {
     matchingSkills: [{
@@ -90,7 +90,7 @@ const analysisSchema = new mongoose.Schema({
       max: 100
     }
   },
-  
+
   // Additional Insights
   insights: {
     marketDemand: {
@@ -99,12 +99,12 @@ const analysisSchema = new mongoose.Schema({
     },
     growthPotential: {
       type: String,
-      enum: ['Low', 'Medium', 'High']
+      enum: ['Low', 'Medium', 'High', 'Very High']
     },
     recommendations: [String],
     industryTrends: [String]
   },
-  
+
   // Metadata
   createdAt: {
     type: Date,

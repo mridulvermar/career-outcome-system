@@ -51,6 +51,7 @@ import {
 import { analysisAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import FloatingChatbot from '../components/FloatingChatbot';
 
 const MotionContainer = motion(Container);
 const MotionPaper = motion(Paper);
@@ -480,6 +481,9 @@ function ResultsPage() {
           </MotionCard>
         </Grid>
       </Grid>
+
+      {/* Floating Chatbot */}
+      <FloatingChatbot analysisData={analysis} />
     </MotionContainer>
   );
 }

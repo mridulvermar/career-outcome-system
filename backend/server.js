@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 
@@ -45,6 +47,8 @@ connectDB();
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/analysis', require('./routes/analysis'));
 app.use('/api/resume', require('./routes/resume'));
+app.use("/api/chat", chatRoutes);
+
 
 // Health check route
 app.get('/api/health', (req, res) => {
