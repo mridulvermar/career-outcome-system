@@ -53,26 +53,28 @@ SALARY_DATA = {
 }
 
 # Enhanced Mapping for Rule-Based Prediction - EXPANDED with more skills per role
+# Enhanced Mapping for Rule-Based Prediction - EXPANDED with more skills per role
+# ORDER MATTERS: Top skills get higher weight (3.0 for top 3, 2.0 for next 5)
 EXTENDED_SKILL_MAPPING = {
-    'AI Engineer': ['Python', 'TensorFlow', 'PyTorch', 'Deep Learning', 'NLP', 'Natural Language Processing', 'Computer Vision', 'MLOps', 'Docker', 'Kubernetes', 'AWS', 'Azure', 'AI/ML', 'Machine Learning', 'Neural Networks', 'Generative AI', 'Transformers', 'BERT', 'GPT', 'Model Deployment', 'Data Preprocessing', 'Feature Engineering', 'AI', 'DL'],
-    'ML Engineer': ['Python', 'Scikit-learn', 'Pandas', 'NumPy', 'Data Modeling', 'AWS', 'SQL', 'Mathematics', 'Statistics', 'AI/ML', 'Machine Learning', 'Model Training', 'Model Evaluation', 'Feature Engineering', 'Data Preprocessing', 'MLOps', 'TensorFlow', 'PyTorch', 'XGBoost', 'Random Forest', 'Regression', 'Classification', 'ML', 'AI'],
-    'Data Scientist': ['Python', 'R', 'SQL', 'Statistics', 'Data Visualization', 'Tableau', 'PowerBI', 'Power BI', 'Machine Learning', 'Big Data', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'Jupyter', 'Data Analysis', 'Predictive Modeling', 'A/B Testing', 'Hypothesis Testing', 'Excel', 'Data Mining', 'Statistical Analysis', 'ML'],
-    'Data Engineer': ['Python', 'SQL', 'Spark', 'Apache Spark', 'Hadoop', 'Kafka', 'Airflow', 'AWS', 'ETL', 'Big Data', 'Database Design', 'Data Warehousing', 'PostgreSQL', 'MongoDB', 'Redis', 'Data Pipeline', 'Scala', 'Java', 'Azure', 'GCP', 'Snowflake', 'Databricks', 'NoSQL'],
-    'Software Engineer': ['Java', 'C++', 'Python', 'Data Structures', 'Algorithms', 'DSA', 'System Design', 'Git', 'SQL', 'Problem Solving', 'Object-Oriented Programming', 'OOP', 'Design Patterns', 'Testing', 'Debugging', 'Code Review', 'Agile', 'REST API', 'Microservices', 'Linux', 'Version Control'],
-    'Full Stack Developer': ['JavaScript', 'React', 'Node.js', 'HTML', 'CSS', 'MongoDB', 'SQL', 'REST API', 'GraphQL', 'Git', 'Express', 'TypeScript', 'PostgreSQL', 'MySQL', 'Redux', 'Next.js', 'Vue', 'Angular', 'Responsive Design', 'Web Development', 'Frontend', 'Backend', 'Full Stack'],
-    'Frontend Engineer': ['JavaScript', 'React', 'Angular', 'Vue.js', 'Vue', 'HTML', 'CSS', 'UI/UX', 'Responsive Design', 'TypeScript', 'Webpack', 'Redux', 'SASS', 'LESS', 'Tailwind CSS', 'Bootstrap', 'jQuery', 'Web Performance', 'Accessibility', 'Cross-browser Compatibility', 'ES6', 'JS'],
-    'Backend Engineer': ['Java', 'Python', 'Node.js', 'Go', 'SQL', 'NoSQL', 'Microservices', 'API Design', 'Redis', 'Docker', 'PostgreSQL', 'MongoDB', 'REST API', 'GraphQL', 'Spring Boot', 'Django', 'Flask', 'Express', 'Kafka', 'RabbitMQ', 'System Design', 'Database Design', 'Caching'],
-    'DevOps Engineer': ['Linux', 'Bash', 'Docker', 'Kubernetes', 'K8s', 'Jenkins', 'Terraform', 'AWS', 'Azure', 'GCP', 'CI/CD', 'Ansible', 'Git', 'Python', 'Monitoring', 'Prometheus', 'Grafana', 'Infrastructure as Code', 'IAC', 'Shell Scripting', 'Automation', 'Cloud Computing', 'Networking'],
-    'Cloud Architect': ['AWS', 'Azure', 'GCP', 'Networking', 'Security', 'System Design', 'Microservices', 'Kubernetes', 'Terraform', 'Cloud Computing', 'Infrastructure as Code', 'Serverless', 'Lambda', 'EC2', 'S3', 'VPC', 'Load Balancing', 'Auto Scaling', 'Cloud Migration', 'Cost Optimization', 'DevOps', 'Docker'],
-    'Cybersecurity Analyst': ['Network Security', 'Linux', 'Python', 'Penetration Testing', 'Pen Testing', 'Firewalls', 'Cryptography', 'SIEM', 'Risk Analysis', 'Vulnerability Assessment', 'Incident Response', 'Security Auditing', 'Ethical Hacking', 'Wireshark', 'Nmap', 'Metasploit', 'Security Compliance', 'Threat Intelligence', 'Cybersecurity', 'InfoSec'],
-    'Blockchain Developer': ['Solidity', 'Ethereum', 'Smart Contracts', 'Cryptography', 'Blockchain', 'Web3.js', 'Web3', 'Go', 'Rust', 'Decentralized Applications', 'DApps', 'Cryptocurrency', 'Bitcoin', 'Hyperledger', 'Truffle', 'Hardhat', 'NFT', 'DeFi', 'Consensus Algorithms', 'Distributed Systems'],
-    'Product Manager': ['Product Strategy', 'Agile', 'Scrum', 'User Research', 'Data Analysis', 'Communication', 'Leadership', 'Roadmapping', 'Stakeholder Management', 'Product Development', 'Market Research', 'User Stories', 'A/B Testing', 'Analytics', 'Product Lifecycle', 'Prioritization', 'SQL', 'Jira', 'Product Vision', 'Customer Feedback'],
-    'Business Analyst': ['SQL', 'Excel', 'Tableau', 'PowerBI', 'Power BI', 'Data Analysis', 'Requirements Gathering', 'Communication', 'Process Modeling', 'Business Intelligence', 'Stakeholder Management', 'Documentation', 'JIRA', 'Agile', 'Scrum', 'Data Visualization', 'Problem Solving', 'Reporting', 'Analytics', 'Business Process'],
-    'Data Analyst': ['SQL', 'Python', 'Excel', 'Tableau', 'Power BI', 'PowerBI', 'Statistics', 'Data Visualization', 'Data Analysis', 'Pandas', 'NumPy', 'Matplotlib', 'Reporting', 'Dashboard', 'Google Analytics', 'R', 'Data Mining', 'Business Intelligence', 'ETL', 'Data Cleaning', 'Analytics'],
-    'Research Scientist': ['Python', 'Research', 'Deep Learning', 'Publications', 'Statistics', 'Machine Learning', 'Mathematics', 'TensorFlow', 'PyTorch', 'Scientific Computing', 'Experimentation', 'Data Analysis', 'Academic Writing', 'Peer Review', 'R', 'MATLAB', 'Algorithm Development', 'AI', 'NLP', 'Computer Vision'],
-    'BI Analyst': ['SQL', 'Tableau', 'Power BI', 'PowerBI', 'Excel', 'Data Warehousing', 'Business Intelligence', 'Data Visualization', 'ETL', 'Reporting', 'Dashboard Design', 'Data Modeling', 'SSRS', 'SSIS', 'Analytics', 'Data Analysis', 'Database', 'Data Mining', 'KPI', 'Metrics'],
-    'Consultant': ['Strategy', 'Problem Solving', 'Communication', 'Excel', 'PowerPoint', 'Data Analysis', 'Business Analysis', 'Project Management', 'Stakeholder Management', 'Presentation Skills', 'Research', 'Critical Thinking', 'Client Management', 'Business Strategy', 'Process Improvement', 'Change Management'],
-    'Marketing Manager': ['Marketing Strategy', 'SEO', 'Content Marketing', 'Analytics', 'Social Media', 'Digital Marketing', 'Google Analytics', 'Campaign Management', 'Brand Management', 'Market Research', 'Email Marketing', 'PPC', 'SEM', 'Communication', 'Leadership', 'Budget Management', 'Marketing Automation', 'CRM'],
+    'AI Engineer': ['Artificial Intelligence', 'Machine Learning', 'Deep Learning', 'TensorFlow', 'PyTorch', 'Neural Networks', 'NLP', 'Computer Vision', 'Generative AI', 'Transformers', 'Python', 'MLOps', 'Docker', 'Kubernetes', 'AWS', 'Azure', 'BERT', 'GPT', 'Model Deployment', 'Data Preprocessing', 'Feature Engineering'],
+    'ML Engineer': ['Machine Learning', 'Model Training', 'Python', 'Scikit-learn', 'TensorFlow', 'PyTorch', 'Data Modeling', 'Feature Engineering', 'MLOps', 'Pandas', 'NumPy', 'AWS', 'SQL', 'Mathematics', 'Statistics', 'XGBoost', 'Random Forest', 'Regression', 'Classification', 'Model Evaluation', 'Data Preprocessing'],
+    'Data Scientist': ['Data Science', 'Statistics', 'Machine Learning', 'Python', 'SQL', 'Data Visualization', 'Pandas', 'NumPy', 'R', 'Tableau', 'Power BI', 'Big Data', 'Matplotlib', 'Seaborn', 'Jupyter', 'Data Analysis', 'Predictive Modeling', 'A/B Testing', 'Hypothesis Testing', 'Data Mining', 'Statistical Analysis'],
+    'Data Engineer': ['Data Engineering', 'ETL', 'SQL', 'Python', 'Spark', 'Apache Spark', 'Big Data', 'Data Warehousing', 'Data Pipeline', 'Airflow', 'Kafka', 'Hadoop', 'Database Design', 'AWS', 'Azure', 'GCP', 'PostgreSQL', 'MongoDB', 'Redis', 'Scala', 'Java', 'Snowflake', 'Databricks', 'NoSQL'],
+    'Software Engineer': ['Software Engineering', 'System Design', 'Data Structures', 'Algorithms', 'Java', 'C++', 'Python', 'Object-Oriented Programming', 'Design Patterns', 'Problem Solving', 'Git', 'SQL', 'DSA', 'Testing', 'Debugging', 'Code Review', 'Agile', 'REST API', 'Microservices', 'Linux', 'Version Control'],
+    'Full Stack Developer': ['Full Stack', 'React', 'Node.js', 'JavaScript', 'HTML', 'CSS', 'MongoDB', 'SQL', 'REST API', 'Express', 'Git', 'TypeScript', 'PostgreSQL', 'MySQL', 'Redux', 'Next.js', 'Vue', 'Angular', 'Responsive Design', 'Web Development', 'Frontend', 'Backend'],
+    'Frontend Engineer': ['Frontend', 'React', 'JavaScript', 'HTML', 'CSS', 'UI/UX', 'Responsive Design', 'TypeScript', 'Angular', 'Vue.js', 'Redux', 'Webpack', 'SASS', 'LESS', 'Tailwind CSS', 'Bootstrap', 'jQuery', 'Web Performance', 'Accessibility', 'Cross-browser Compatibility', 'ES6'],
+    'Backend Engineer': ['Backend', 'API Design', 'Java', 'Python', 'Node.js', 'SQL', 'NoSQL', 'Microservices', 'System Design', 'Database Design', 'Redis', 'Docker', 'PostgreSQL', 'MongoDB', 'REST API', 'GraphQL', 'Spring Boot', 'Django', 'Flask', 'Express', 'Kafka', 'RabbitMQ', 'Go', 'Caching'],
+    'DevOps Engineer': ['DevOps', 'CI/CD', 'Docker', 'Kubernetes', 'Jenkins', 'Terraform', 'Linux', 'AWS', 'Azure', 'GCP', 'Ansible', 'Git', 'Bash', 'Python', 'Monitoring', 'Prometheus', 'Grafana', 'Infrastructure as Code', 'Shell Scripting', 'Automation', 'Cloud Computing', 'Networking'],
+    'Cloud Architect': ['Cloud Architecture', 'AWS', 'Azure', 'GCP', 'System Design', 'Microservices', 'Networking', 'Security', 'Kubernetes', 'Terraform', 'Cloud Computing', 'Infrastructure as Code', 'Serverless', 'Lambda', 'EC2', 'S3', 'VPC', 'Load Balancing', 'Auto Scaling', 'Cloud Migration', 'Cost Optimization', 'DevOps', 'Docker'],
+    'Cybersecurity Analyst': ['Cybersecurity', 'Network Security', 'Penetration Testing', 'Incident Response', 'Risk Analysis', 'Linux', 'Python', 'Firewalls', 'Cryptography', 'SIEM', 'Vulnerability Assessment', 'Security Auditing', 'Ethical Hacking', 'Wireshark', 'Nmap', 'Metasploit', 'Security Compliance', 'Threat Intelligence', 'InfoSec'],
+    'Blockchain Developer': ['Blockchain', 'Smart Contracts', 'Solidity', 'Ethereum', 'Web3.js', 'Cryptography', 'Decentralized Applications', 'DApps', 'Web3', 'Go', 'Rust', 'Cryptocurrency', 'Bitcoin', 'Hyperledger', 'Truffle', 'Hardhat', 'NFT', 'DeFi', 'Consensus Algorithms', 'Distributed Systems'],
+    'Product Manager': ['Product Management', 'Product Strategy', 'User Research', 'Roadmapping', 'Agile', 'Scrum', 'Stakeholder Management', 'Data Analysis', 'Communication', 'Leadership', 'Product Development', 'Market Research', 'User Stories', 'A/B Testing', 'Analytics', 'Product Lifecycle', 'Prioritization', 'SQL', 'Jira', 'Product Vision'],
+    'Business Analyst': ['Business Analysis', 'Requirements Gathering', 'Process Modeling', 'SQL', 'Excel', 'Tableau', 'Power BI', 'Data Analysis', 'Communication', 'Stakeholder Management', 'Documentation', 'JIRA', 'Agile', 'Scrum', 'Data Visualization', 'Problem Solving', 'Reporting', 'Analytics', 'Business Process'],
+    'Data Analyst': ['Data Analysis', 'SQL', 'Excel', 'Tableau', 'Power BI', 'Statistics', 'Data Visualization', 'Python', 'Reporting', 'Pandas', 'NumPy', 'Dashboard', 'Google Analytics', 'R', 'Data Mining', 'Business Intelligence', 'ETL', 'Data Cleaning', 'Analytics'],
+    'Research Scientist': ['Research', 'Scientific Computing', 'Python', 'Deep Learning', 'Publications', 'Statistics', 'Machine Learning', 'Mathematics', 'TensorFlow', 'PyTorch', 'Experimentation', 'Data Analysis', 'Academic Writing', 'Peer Review', 'R', 'MATLAB', 'Algorithm Development', 'AI', 'NLP', 'Computer Vision'],
+    'BI Analyst': ['Business Intelligence', 'SQL', 'Tableau', 'Power BI', 'Data Warehousing', 'Data Visualization', 'Excel', 'ETL', 'Reporting', 'Dashboard Design', 'Data Modeling', 'SSRS', 'SSIS', 'Analytics', 'Data Analysis', 'Database', 'Data Mining', 'KPI', 'Metrics'],
+    'Consultant': ['Consulting', 'Strategy', 'Problem Solving', 'Communication', 'Excel', 'PowerPoint', 'Data Analysis', 'Business Analysis', 'Project Management', 'Stakeholder Management', 'Presentation Skills', 'Research', 'Critical Thinking', 'Client Management', 'Business Strategy', 'Process Improvement', 'Change Management'],
+    'Marketing Manager': ['Marketing', 'Marketing Strategy', 'SEO', 'Content Marketing', 'Analytics', 'Social Media', 'Digital Marketing', 'Google Analytics', 'Campaign Management', 'Brand Management', 'Market Research', 'Email Marketing', 'PPC', 'SEM', 'Communication', 'Leadership', 'Budget Management', 'Marketing Automation', 'CRM'],
     'Project Manager': ['Project Management', 'Agile', 'Scrum', 'Risk Management', 'Stakeholder Management', 'Leadership', 'Communication', 'Planning', 'Budgeting', 'Resource Management', 'JIRA', 'MS Project', 'PMP', 'Kanban', 'Team Management', 'Problem Solving', 'Documentation', 'Reporting', 'Timeline Management']
 }
 
@@ -315,9 +317,9 @@ def predict_with_enhanced_rules(degree, skills, experience):
         'Data Science': ['Data Scientist', 'Data Analyst', 'Data Engineer', 'ML Engineer', 'AI Engineer', 'BI Analyst', 'Research Scientist'],
         'Information Technology': ['Software Engineer', 'DevOps Engineer', 'Cloud Architect', 'Cybersecurity Analyst', 'Data Engineer', 'Business Analyst'],
         'Business': ['Product Manager', 'Business Analyst', 'Consultant', 'Marketing Manager', 'Project Manager'],
-        'Mathematics': ['Data Scientist', 'Data Analyst', 'ML Engineer', 'Research Scientist'],
+        'Mathematics': ['Data Scientist', 'Data Analyst', 'ML Engineer', 'Research Scientist', 'AI Engineer'],
         'Engineering': ['Software Engineer', 'ML Engineer', 'AI Engineer', 'Data Engineer', 'DevOps Engineer'],
-        'Other': ['Software Engineer', 'Data Analyst', 'Business Analyst'] # Default for less specific degrees
+        'Other': ['Data Analyst', 'Business Analyst', 'Project Manager'] # Updated: Removed generic SE to reduce bias
     }
     
     # Normalize degree input to match keys, or use 'Other'
@@ -350,9 +352,10 @@ def predict_with_enhanced_rules(degree, skills, experience):
         weighted_required_skills = []
         for i, skill in enumerate(required_skills_for_role):
             weight = 1.0
-            if i < 5: weight = 2.5 # Top 5 skills are critical
-            elif i < 10: weight = 1.8 # Next 5 are very important
-            elif i < 15: weight = 1.2 # Next 5 are important
+            # Increased weight differentiation to favor specialized skills
+            if i < 3: weight = 3.0   # Top 3 are CRITICAL (e.g. "Machine Learning" for ML Engineer)
+            elif i < 8: weight = 2.0 # Next 5 are very important
+            elif i < 15: weight = 1.2 # Next 7 are important
             weighted_required_skills.append((skill, weight))
 
         current_role_score = 0
