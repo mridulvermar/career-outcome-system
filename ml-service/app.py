@@ -179,6 +179,9 @@ def normalize_skill(skill):
     # Return as-is if no mapping found
     return skill_lower
 
+# Max skills to consider for scoring and analysis
+MAX_SKILLS_TO_CHECK = 15
+
 @app.route('/', methods=['GET'])
 def index():
     """Root endpoint"""
@@ -229,7 +232,8 @@ def predict():
         skill_gap = analyze_skill_gap(
             skills, 
             prediction_result['careerRole'],
-            experience
+            experience,
+            prediction_result['probability']
         )
         
         # Generate insights
@@ -348,14 +352,17 @@ def predict_with_enhanced_rules(degree, skills, experience):
         if not required_skills_for_role and skill_role_mapping and role in skill_role_mapping:
              required_skills_for_role = list(skill_role_mapping[role].keys())
         
+        # Limit skills to Max Skills to Check
+        required_skills_for_role = required_skills_for_role[:MAX_SKILLS_TO_CHECK]
+
         # Assign weights to skills (first few skills are more important)
         weighted_required_skills = []
         for i, skill in enumerate(required_skills_for_role):
             weight = 1.0
             # Increased weight differentiation to favor specialized skills
             if i < 3: weight = 3.0   # Top 3 are CRITICAL (e.g. "Machine Learning" for ML Engineer)
-            elif i < 8: weight = 2.0 # Next 5 are very important
-            elif i < 15: weight = 1.2 # Next 7 are important
+            elif i < 7: weight = 2.0 # Next 4 are very important
+            elif i < 12: weight = 1.2 # Next 5 are important
             weighted_required_skills.append((skill, weight))
 
         current_role_score = 0
@@ -409,15 +416,18 @@ def predict_with_enhanced_rules(degree, skills, experience):
         predicted_role = best_match['role']
         best_match_score = best_match['score']
         
-        # Calculate confidence based on the best score and number of matched skills
-        # Confidence is higher if score is high AND many skills matched
-        confidence = (best_match_score / 100.0) * (best_match['matched_skills_count'] / max(best_match['total_required_skills'], 1))
-        confidence = min(max(confidence, 0.2), 0.95) # Clamp confidence between 20% and 95%
+        # Calculate confidence - Align with Overall Match percentage
+        # Use the weighted score directly as the probability, 
+        # as it already represents the match quality across the most important skills.
+        confidence = best_match_score / 100.0
+        
+        # Clamp confidence between 15% and 95%
+        confidence = min(max(confidence, 0.15), 0.95)
         
         # Adjust confidence based on experience
-        if experience >= 5 and best_match_score > 60:
+        if experience >= 5 and confidence > 0.6:
             confidence = min(confidence * 1.1, 0.99)
-        elif experience < 1 and best_match_score < 40:
+        elif experience < 1 and confidence < 0.4:
             confidence = max(confidence * 0.8, 0.15)
 
     # Get Salary Data (INR)
@@ -465,7 +475,7 @@ def predict_with_enhanced_rules(degree, skills, experience):
         'alternativeCareers': alternatives
     }
 
-def analyze_skill_gap(user_skills, predicted_role, experience):
+def analyze_skill_gap(user_skills, predicted_role, experience, probability=None):
     """Analyze skill gaps for predicted role"""
     
     # Get required skills for role from our DEFINITIVE list
@@ -473,7 +483,7 @@ def analyze_skill_gap(user_skills, predicted_role, experience):
     if not required_skills and skill_role_mapping:
          required_skills = list(skill_role_mapping.get(predicted_role, {}).keys())
     
-    required_skills = required_skills[:12] # Top 12 skills
+    required_skills = required_skills[:MAX_SKILLS_TO_CHECK] # Use consistent max skills
     
     # Find matching and missing skills (Case insensitive check)
     user_skills_lower = [s.lower() for s in user_skills]
@@ -507,8 +517,11 @@ def analyze_skill_gap(user_skills, predicted_role, experience):
             'priority': 5 - idx
         })
     
-    # Calculate overall match
-    overall_match = int((len(matching_skills) / max(len(required_skills), 1)) * 100)
+    # Calculate overall match - Align with prediction probability
+    if probability is not None:
+        overall_match = int(probability * 100)
+    else:
+        overall_match = int((len(matching_skills) / max(len(required_skills), 1)) * 100)
     
     return {
         'matchingSkills': matching_skills,

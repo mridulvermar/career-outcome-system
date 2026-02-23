@@ -11,30 +11,58 @@ exports.parseResume = async (req, res) => {
         const data = await pdf(dataBuffer);
         const text = data.text;
 
-        // Basic extraction logic (regex-based)
-        // This is a simplified example. In a real app, use NLP or OpenAI.
+        console.log('--- Resume Text Extracted ---');
+        console.log(`Text length: ${text.length} characters`);
+        console.log('Preview:', text.substring(0, 500).replace(/\n/g, ' '));
+        console.log('-----------------------------');
 
-        // Extract Email
+        // Basic extraction logic (regex-based)
+        // ... (email extraction) ...
         const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/;
         const emailMatch = text.match(emailRegex);
         const email = emailMatch ? emailMatch[0] : '';
 
-        // Extract Skills (Simple keyword matching from our predefined list)
+        // Extract Skills (Expanded list with improved matching)
         const predefinedSkills = [
-            'Python', 'JavaScript', 'Java', 'C++', 'SQL', 'Git',
-            'Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP',
-            'React', 'Angular', 'Vue.js', 'Node.js', 'Django', 'Flask',
-            'Machine Learning', 'Deep Learning', 'Data Analysis', 'Statistics',
-            'TensorFlow', 'PyTorch', 'Scikit-learn',
-            'PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch',
-            'CI/CD', 'DevOps', 'Linux', 'Networking',
-            'Agile', 'Scrum', 'Project Management',
-            'Communication', 'Problem Solving', 'Teamwork', 'Leadership','aws','AI/Ml'
+            // Programming Languages
+            'Python', 'JavaScript', 'Java', 'C++', 'C', 'C#', 'Go', 'Rust', 'Swift', 'Kotlin', 'PHP', 'Ruby', 'TypeScript', 'Scala', 'R', 'Matlab', 'Dart', 'Lua', 'Perl', 'Haskell', 'Julia', 'VBA', 'Objective-C', 'Assembly',
+            'SQL', 'NoSQL', 'R', 'HTML', 'CSS', 'Sass', 'Less',
+
+            // Frameworks & Libraries
+            'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Next.js', 'NestJS', 'Django', 'Flask', 'FastAPI', 'Spring Boot', 'ASP.NET', 'Laravel', 'Rails', 'Svelte', 'jQuery', 'Bootstrap', 'Tailwind CSS', 'Material UI', 'MUI', 'Redux', 'Zustand', 'Axios',
+
+            // Cloud & DevOps
+            'AWS', 'Azure', 'GCP', 'Google Cloud', 'Docker', 'Kubernetes', 'Jenkins', 'Git', 'GitHub', 'GitLab', 'CI/CD', 'Terraform', 'Ansible', 'Linux', 'Unix', 'Bash', 'Shell Scripting', 'Nginx', 'Apache', 'Heroku', 'Vercel', 'Netlify', 'CircleCI', 'Prometheus', 'Grafana',
+
+            // Data Science & ML
+            'Machine Learning', 'Deep Learning', 'Artificial Intelligence', 'AI', 'NLP', 'Computer Vision', 'Generative AI', 'LLMs', 'TensorFlow', 'PyTorch', 'Keras', 'Scikit-learn', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'OpenCV', 'Spark', 'Hadoop', 'Tableau', 'Power BI',
+
+            // Databases
+            'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Cassandra', 'Oracle', 'SQL Server', 'Firebase', 'DynamoDB', 'Elasticsearch', 'MariaDB', 'SQLite', 'Prisma', 'Sequelize', 'Mongoose',
+
+            // Mobile
+            'Flutter', 'React Native', 'Android', 'iOS', 'Ionic', 'Xamarin', 'Kotlin Multiplatform',
+
+            // Tools & Concepts
+            'Agile', 'Scrum', 'Jira', 'Trello', 'Postman', 'Swagger', 'Unit Testing', 'Jest', 'Cypress', 'Microservices', 'System Design', 'Design Patterns', 'Algorithms', 'Data Structures', 'REST API', 'GraphQL', 'WebSockets'
         ];
 
-        const extractedSkills = predefinedSkills.filter(skill =>
-            new RegExp(`\\b${skill}\\b`, 'i').test(text)
-        );
+        console.log(`Checking for ${predefinedSkills.length} predefined skills...`);
+
+        const extractedSkills = predefinedSkills.filter(skill => {
+            // Escape special characters for regex
+            const escapedSkill = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+            // Improved boundary check: 
+            // - Preceded by start of string or something not a word char, +, or #
+            // - Followed by end of string or something not a word char, +, or #
+            const pattern = `(?:^|[^a-zA-Z0-9+#])${escapedSkill}(?![a-zA-Z0-9+#])`;
+
+            const regex = new RegExp(pattern, 'i');
+            return regex.test(text);
+        });
+
+        console.log(`Extracted ${extractedSkills.length} skills:`, extractedSkills);
 
         // Cleanup: Delete the uploaded file after processing
         fs.unlinkSync(req.file.path);

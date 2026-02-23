@@ -15,6 +15,7 @@ import {
   CircularProgress,
   Alert,
   Grid,
+  Autocomplete,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { analysisAPI } from '../services/api';
@@ -35,15 +36,26 @@ const DEGREES = [
 ];
 
 const AVAILABLE_SKILLS = [
-  'Python', 'JavaScript', 'Java', 'C++', 'SQL', 'Git',
-  'Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP',
-  'React', 'Angular', 'Vue.js', 'Node.js', 'Django', 'Flask',
-  'Machine Learning', 'Deep Learning', 'Data Analysis', 'Statistics',
-  'TensorFlow', 'PyTorch', 'Scikit-learn',
-  'PostgreSQL', 'MongoDB', 'Redis', 'Elasticsearch',
-  'CI/CD', 'DevOps', 'Linux', 'Networking',
-  'Agile', 'Scrum', 'Project Management',
-  'Communication', 'Problem Solving', 'Teamwork', 'Leadership',
+  // Programming Languages
+  'Python', 'JavaScript', 'Java', 'C++', 'C', 'C#', 'Go', 'Rust', 'Swift', 'Kotlin', 'PHP', 'Ruby', 'TypeScript', 'Scala', 'R', 'Matlab', 'Dart', 'Lua', 'Perl', 'Haskell', 'Julia', 'VBA', 'Objective-C', 'Assembly', 'SQL', 'NoSQL', 'HTML', 'CSS', 'Sass', 'Less',
+
+  // Web Development (Frontend/Backend/Fullstack)
+  'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Next.js', 'NestJS', 'Django', 'Flask', 'FastAPI', 'Spring Boot', 'ASP.NET', 'Laravel', 'Rails', 'Svelte', 'jQuery', 'Bootstrap', 'Tailwind CSS', 'Material UI', 'MUI', 'Redux', 'Zustand', 'Axios', 'GraphQL', 'REST API', 'WebSockets', 'TRPC',
+
+  // Data Science & AI/ML
+  'Machine Learning', 'Deep Learning', 'Artificial Intelligence', 'AI', 'Data Science', 'Data Analysis', 'Statistics', 'TensorFlow', 'PyTorch', 'Keras', 'Scikit-learn', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'OpenCV', 'NLP', 'Computer Vision', 'Generative AI', 'LLMs', 'Hugging Face', 'Data Mining', 'Big Data', 'Hadoop', 'Spark', 'Mojo', 'Tableau', 'Power BI',
+
+  // Database
+  'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Cassandra', 'Oracle', 'SQL Server', 'Firebase', 'DynamoDB', 'Elasticsearch', 'MariaDB', 'SQLite', 'Prisma', 'Sequelize', 'Mongoose', 'Supabase',
+
+  // DevOps & Cloud
+  'AWS', 'Azure', 'GCP', 'Google Cloud', 'Docker', 'Kubernetes', 'Jenkins', 'Git', 'GitHub', 'GitLab', 'Bitbucket', 'CI/CD', 'Terraform', 'Ansible', 'Linux', 'Unix', 'Bash', 'Shell Scripting', 'Nginx', 'Apache', 'Heroku', 'Vercel', 'Netlify', 'CircleCI', 'Prometheus', 'Grafana',
+
+  // Mobile Development
+  'Flutter', 'React Native', 'Android', 'iOS', 'Ionic', 'Xamarin', 'Kotlin Multiplatform',
+
+  // Other Tools & Concepts
+  'Agile', 'Scrum', 'Jira', 'Trello', 'Slack', 'Postman', 'Swagger', 'Unit Testing', 'Jest', 'Mocha', 'Selenium', 'Cypress', 'Microservices', 'System Design', 'Design Patterns', 'Algorithms', 'Data Structures', 'Problem Solving', 'Teamwork', 'Communication', 'Technical Writing', 'Project Management'
 ];
 
 const INTERESTS = [
@@ -213,27 +225,38 @@ function AnalysisForm() {
               <Typography variant="subtitle1" gutterBottom fontWeight="600" display="flex" alignItems="center">
                 <Code sx={{ mr: 1, color: 'secondary.main' }} /> Technical Skills
               </Typography>
-              <FormControl fullWidth required>
-                <InputLabel>Skills & Technologies</InputLabel>
-                <Select
-                  multiple
-                  value={formData.skills}
-                  onChange={handleChange('skills')}
-                  input={<OutlinedInput label="Skills & Technologies" />}
-                  renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {selected.map((value) => (
-                        <Chip key={value} label={value} size="small" sx={{ bgcolor: 'primary.light', color: 'primary.dark', fontWeight: 'bold' }} />
-                      ))}
-                    </Box>
-                  )}
-                  MenuProps={{ PaperProps: { sx: { maxHeight: 300 } } }}
-                >
-                  {AVAILABLE_SKILLS.map((skill) => (
-                    <MenuItem key={skill} value={skill}>{skill}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Autocomplete
+                multiple
+                freeSolo
+                id="skills-autocomplete"
+                options={AVAILABLE_SKILLS}
+                value={formData.skills}
+                onChange={(event, newValue) => {
+                  setFormData({ ...formData, skills: newValue });
+                  if (newValue.length > 0) setError('');
+                }}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => (
+                    <Chip
+                      {...getTagProps({ index })}
+                      key={option}
+                      variant="outlined"
+                      label={option}
+                      size="small"
+                      sx={{ bgcolor: 'primary.light', color: 'primary.dark', fontWeight: 'bold' }}
+                    />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Skills & Technologies"
+                    placeholder="Select or type to add..."
+                    helperText="Type to add custom skills not in the list"
+                  />
+                )}
+              />
             </Box>
 
             {/* Experience & Interests */}
