@@ -1,0 +1,183 @@
+{
+  "Software Engineer": {
+    "AWS": 46,
+    "Git": 46,
+    "SQL": 45,
+    "Python": 45,
+    "JavaScript": 44,
+    "Docker": 44,
+    "Teamwork": 16,
+    "Agile": 11,
+    "Problem Solving": 11,
+    "Communication": 10
+  },
+  "Data Scientist": {
+    "Data Visualization": 46,
+    "Statistics": 46,
+    "SQL": 45,
+    "Python": 45,
+    "Machine Learning": 44,
+    "TensorFlow": 44,
+    "Teamwork": 16,
+    "Agile": 11,
+    "Problem Solving": 11,
+    "Communication": 10
+  },
+  "ML Engineer": {
+    "TensorFlow": 97,
+    "MLOps": 94,
+    "Python": 93,
+    "PyTorch": 91,
+    "Machine Learning": 50,
+    "Kubernetes": 46,
+    "Deep Learning": 44,
+    "Teamwork": 28,
+    "Problem Solving": 27,
+    "Communication": 25
+  },
+  "DevOps Engineer": {
+    "Git": 43,
+    "Terraform": 42,
+    "CI/CD": 41,
+    "Docker": 41,
+    "Kubernetes": 40,
+    "AWS": 40,
+    "Linux": 38,
+    "Teamwork": 14,
+    "Communication": 11,
+    "Problem Solving": 11
+  },
+  "Full Stack Developer": {
+    "Git": 46,
+    "Node.js": 46,
+    "MongoDB": 45,
+    "JavaScript": 45,
+    "React": 44,
+    "PostgreSQL": 44,
+    "Teamwork": 16,
+    "Agile": 11,
+    "Problem Solving": 11,
+    "Communication": 10
+  },
+  "Backend Engineer": {
+    "REST APIs": 46,
+    "PostgreSQL": 46,
+    "Redis": 45,
+    "Python": 45,
+    "Django": 44,
+    "Docker": 44,
+    "Teamwork": 16,
+    "Agile": 11,
+    "Problem Solving": 11,
+    "Communication": 10
+  },
+  "Frontend Engineer": {
+    "Webpack": 46,
+    "CSS": 46,
+    "HTML": 45,
+    "React": 45,
+    "TypeScript": 44,
+    "Redux": 44,
+    "Teamwork": 16,
+    "Agile": 11,
+    "Problem Solving": 11,
+    "Communication": 10
+  },
+  "Data Analyst": {
+    "Data Visualization": 46,
+    "Excel": 46,
+    "Tableau": 45,
+    "SQL": 45,
+    "Python": 44,
+    "Statistics": 44,
+    "Teamwork": 16,
+    "Agile": 11,
+    "Problem Solving": 11,
+    "Communication": 10
+  },
+  "Data Engineer": {
+    "ETL": 43,
+    "Kafka": 42,
+    "SQL": 41,
+    "Python": 41,
+    "Spark": 40,
+    "Airflow": 40,
+    "AWS": 38,
+    "Teamwork": 14,
+    "Communication": 11,
+    "Problem Solving": 11
+  },
+  "Research Scientist": {
+    "Deep Learning": 51,
+    "Research": 50,
+    "Statistics": 50,
+    "Python": 48,
+    "Publications": 46,
+    "Problem Solving": 16,
+    "Communication": 15,
+    "Teamwork": 12,
+    "Agile": 11
+  },
+  "BI Analyst": {
+    "Power BI": 51,
+    "Tableau": 50,
+    "Data Warehousing": 50,
+    "SQL": 48,
+    "Excel": 46,
+    "Problem Solving": 16,
+    "Communication": 15,
+    "Teamwork": 12,
+    "Agile": 11
+  },
+  "Product Manager": {
+    "Agile": 61,
+    "Stakeholder Management": 51,
+    "UX Design": 50,
+    "Product Strategy": 48,
+    "Analytics": 46,
+    "Problem Solving": 16,
+    "Communication": 15,
+    "Teamwork": 12
+  },
+  "Business Analyst": {
+    "Data Analysis": 51,
+    "Excel": 50,
+    "Presentations": 50,
+    "SQL": 48,
+    "Requirements Gathering": 46,
+    "Problem Solving": 16,
+    "Communication": 15,
+    "Teamwork": 12,
+    "Agile": 11
+  },
+  "Consultant": {
+    "Communication": 66,
+    "Problem Solving": 66,
+    "PowerPoint": 50,
+    "Strategy": 48,
+    "Excel": 46,
+    "Teamwork": 12,
+    "Agile": 11
+  },
+  "Marketing Manager": {
+    "Content Marketing": 51,
+    "SEO": 50,
+    "Social Media": 50,
+    "Marketing Strategy": 48,
+    "Analytics": 46,
+    "Problem Solving": 16,
+    "Communication": 15,
+    "Teamwork": 12,
+    "Agile": 11
+  },
+  "Project Manager": {
+    "Agile": 61,
+    "Scrum": 51,
+    "Stakeholder Management": 50,
+    "Project Management": 48,
+    "Risk Management": 46,
+    "Problem Solving": 16,
+    "Communication": 15,
+    "Teamwork": 12
+  }
+}
