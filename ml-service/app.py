@@ -18,13 +18,13 @@ try:
     degree_encoder = joblib.load(os.path.join(MODEL_PATH, 'degree_encoder.pkl'))
     role_encoder = joblib.load(os.path.join(MODEL_PATH, 'role_encoder.pkl'))
     skills_encoder = joblib.load(os.path.join(MODEL_PATH, 'skills_encoder.pkl'))
+    
     with open(os.path.join(MODEL_PATH, 'skill_role_mapping.json'), 'r') as f:
         skill_role_mapping = json.load(f)
     
-    print("Items loaded: models, encoders, mappings")
-    print("SUCCESS: Models loaded successfully")
+    print("✓ Models loaded successfully")
 except Exception as e:
-    print(f"WARNING: Could not load models - {e}")
+    print(f"⚠ Warning: Could not load models - {e}")
     model = None
 
 # Salary data (role-based) - INDIAN STANDARDS (INR)
@@ -221,8 +221,34 @@ def predict():
         skills = data['skills']
         experience = data['experience']
         
-        # Get prediction
-        response = get_prediction(degree, skills, experience)
+        # Determine prediction method
+        # Prioritize rule-based if specific new skills are present, otherwise use model if available
+        # For now, let's mix: use Rules for new roles not in old model, Model for standard stuff
+        
+        # Simplified: Use Enhanced Rule-Based Logic (since we don't have a retrained model for new roles)
+        prediction_result = predict_with_enhanced_rules(degree, skills, experience)
+        
+        # Perform skill gap analysis
+        skill_gap = analyze_skill_gap(
+            skills, 
+            prediction_result['careerRole'],
+            experience,
+            prediction_result['probability']
+        )
+        
+        # Generate insights
+        insights = generate_insights(
+            prediction_result['careerRole'],
+            experience,
+            skill_gap['overallMatch']
+        )
+        
+        # Prepare response
+        response = {
+            'prediction': prediction_result,
+            'skillGap': skill_gap,
+            'insights': insights
+        }
         
         return jsonify(response)
         
@@ -232,104 +258,6 @@ def predict():
             'error': 'Internal server error',
             'message': str(e)
         }), 500
-
-def get_prediction(degree, skills, experience):
-    """Core prediction logic used by API and tests"""
-    # Determine prediction method
-    if model is not None and degree_encoder is not None and role_encoder is not None and skills_encoder is not None:
-        try:
-            # Prepare features for the model
-            # 1. Encode degree
-            try:
-                degree_encoded = degree_encoder.transform([degree])[0]
-            except:
-                # Fallback if degree not in encoder
-                degree_encoded = degree_encoder.transform(['Other'])[0]
-            
-            # 2. Encode skills
-            skills_encoded = skills_encoder.transform([skills])
-            skills_df = pd.DataFrame(skills_encoded, columns=skills_encoder.classes_)
-            
-            # 3. Combine features
-            X = pd.concat([
-                pd.DataFrame({'degree': [degree_encoded], 'experience': [experience]}),
-                skills_df
-            ], axis=1)
-            
-            # Ensure column names are strings
-            X.columns = [str(c) for c in X.columns]
-            
-            # 4. Predict
-            role_idx = model.predict(X)[0]
-            predicted_role = role_encoder.inverse_transform([role_idx])[0]
-            
-            # 5. Get probabilities for alternatives
-            probs = model.predict_proba(X)[0]
-            top_indices = np.argsort(probs)[::-1]
-            
-            confidence = float(probs[role_idx])
-            
-            prediction_result = {
-                'careerRole': predicted_role,
-                'probability': float(f"{confidence:.2f}"),
-                'confidence': 'Very High' if confidence > 0.85 else 'High' if confidence > 0.7 else 'Medium' if confidence > 0.4 else 'Low',
-                'salaryRange': {
-                    'min': int(SALARY_DATA.get(predicted_role, {'min': 400000})['min']),
-                    'max': int(SALARY_DATA.get(predicted_role, {'max': 1000000})['max']),
-                    'average': int(SALARY_DATA.get(predicted_role, {'avg': 700000})['avg']),
-                    'currency': 'INR'
-                },
-                'alternativeCareers': []
-            }
-            
-            # Add top 3 alternatives
-            for idx in top_indices[1:4]:
-                if probs[idx] > 0.05:
-                    alt_role = role_encoder.inverse_transform([idx])[0]
-                    prediction_result['alternativeCareers'].append({
-                        'role': alt_role,
-                        'probability': float(f"{probs[idx]:.2f}")
-                    })
-            
-            # Apply experience multiplier to salary
-            if experience <= 1: exp_mult = 0.8
-            elif experience <= 3: exp_mult = 1.0
-            elif experience <= 6: exp_mult = 1.5
-            elif experience <= 10: exp_mult = 2.2
-            else: exp_mult = 3.0
-            
-            prediction_result['salaryRange']['min'] = int(prediction_result['salaryRange']['min'] * exp_mult)
-            prediction_result['salaryRange']['max'] = int(prediction_result['salaryRange']['max'] * exp_mult)
-            prediction_result['salaryRange']['average'] = int(prediction_result['salaryRange']['average'] * exp_mult)
-
-            print(f"Prediction made using Random Forest model: {predicted_role}")
-        except Exception as model_error:
-            print(f"Model prediction failed: {model_error}. Falling back to rules.")
-            prediction_result = predict_with_enhanced_rules(degree, skills, experience)
-    else:
-        print("Model not loaded. Using rule-based prediction.")
-        prediction_result = predict_with_enhanced_rules(degree, skills, experience)
-    
-    # Perform skill gap analysis
-    skill_gap = analyze_skill_gap(
-        skills, 
-        prediction_result['careerRole'],
-        experience,
-        prediction_result['probability']
-    )
-    
-    # Generate insights
-    insights = generate_insights(
-        prediction_result['careerRole'],
-        experience,
-        skill_gap['overallMatch']
-    )
-    
-    return {
-        'prediction': prediction_result,
-        'skillGap': skill_gap,
-        'insights': insights
-    }
 
 def match_skill_with_synonyms(user_skill, required_skill):
     """

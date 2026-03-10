@@ -24,9 +24,9 @@ dist/
 .DS_Store
 Thumbs.db
 
-# ML models (included for deployment)
-# ml-service/models/*.pkl
-# ml-service/models/*.json
+# ML models (optional - remove if you want to commit models)
+ml-service/models/*.pkl
+ml-service/models/*.json
 
 # Database
 *.db
