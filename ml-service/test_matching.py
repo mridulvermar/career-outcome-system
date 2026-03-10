@@ -7,8 +7,11 @@ import os
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Import the prediction function
-from app import predict_with_enhanced_rules, EXTENDED_SKILL_MAPPING
+# Import the predictor and data
+from predictor import CareerPredictor
+from data_constants import EXTENDED_SKILL_MAPPING
+
+predictor = CareerPredictor()
 
 def test_job_matching():
     """Test various skill combinations to ensure proper job matching"""
@@ -80,7 +83,7 @@ def test_job_matching():
         print(f"  Experience: {test['experience']} years")
         
         try:
-            result = predict_with_enhanced_rules(
+            result = predictor.predict_with_enhanced_rules(
                 test['degree'],
                 test['skills'],
                 test['experience']
@@ -90,8 +93,8 @@ def test_job_matching():
             confidence = result['probability']
             alternatives = [alt['role'] for alt in result['alternativeCareers']]
             
-            print(f"  → Predicted: {predicted_role} (confidence: {confidence:.2%})")
-            print(f"  → Alternatives: {', '.join(alternatives[:3])}")
+            print(f"  -> Predicted: {predicted_role} (confidence: {confidence:.2%})")
+            print(f"  -> Alternatives: {', '.join(alternatives[:3])}")
             
             # Check if predicted role is in expected roles
             all_suggested = [predicted_role] + alternatives

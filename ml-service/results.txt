@@ -1,0 +1,65 @@
+﻿WARNING: Model files not found. Using rule-based fallback.
+================================================================================
+TESTING IMPROVED JOB MATCHING LOGIC
+================================================================================
+
+
+Test: Data Science Skills
+  Degree: Computer Science
+  Skills: Python, Machine Learning, Statistics, Pandas, Tableau
+  Experience: 2 years
+  -> Predicted: Data Scientist (confidence: 57.00%)
+  -> Alternatives: ML Engineer, AI Engineer, Research Scientist
+  [PASS] - Found expected role in suggestions
+
+Test: DevOps Skills
+  Degree: Information Technology
+  Skills: Docker, Kubernetes, AWS, CI/CD, Linux
+  Experience: 3 years
+  -> Predicted: DevOps Engineer (confidence: 54.00%)
+  -> Alternatives: Cloud Architect
+  [PASS] - Found expected role in suggestions
+
+Test: Product Management Skills
+  Degree: Business
+  Skills: Product Strategy, Agile, User Research, Communication, Data Analysis
+  Experience: 4 years
+  -> Predicted: Product Manager (confidence: 56.00%)
+  -> Alternatives: Consultant, Project Manager, Business Analyst
+  [PASS] - Found expected role in suggestions
+
+Test: Blockchain Skills
+  Degree: Computer Science
+  Skills: Solidity, Ethereum, Smart Contracts, Web3, Cryptography
+  Experience: 2 years
+  -> Predicted: Blockchain Developer (confidence: 61.00%)
+  -> Alternatives: 
+  [PASS] - Found expected role in suggestions
+
+Test: AI/ML Skills with Synonyms
+  Degree: Data Science
+  Skills: Python, TensorFlow, Deep Learning, NLP, AI/ML
+  Experience: 3 years
+  -> Predicted: AI Engineer (confidence: 73.00%)
+  -> Alternatives: Research Scientist, ML Engineer, Data Scientist
+  [PASS] - Found expected role in suggestions
+
+Test: Frontend Development
+  Degree: Computer Science
+  Skills: React, JavaScript, HTML, CSS, TypeScript, Redux
+  Experience: 2 years
+  -> Predicted: Frontend Engineer (confidence: 61.00%)
+  -> Alternatives: Full Stack Developer
+  [PASS] - Found expected role in suggestions
+
+Test: Cybersecurity Skills
+  Degree: Information Technology
+  Skills: Network Security, Penetration Testing, Linux, Python, Firewalls
+  Experience: 3 years
+  -> Predicted: Cybersecurity Analyst (confidence: 58.00%)
+  -> Alternatives: DevOps Engineer, Software Engineer
+  [PASS] - Found expected role in suggestions
+
+================================================================================
+RESULTS: 7 passed, 0 failed out of 7 tests
+================================================================================
