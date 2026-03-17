@@ -212,16 +212,22 @@ function generateMockPrediction(input) {
     'Computer Science': ['Software Engineer', 'Data Scientist', 'ML Engineer', 'DevOps Engineer'],
     'Business': ['Product Manager', 'Business Analyst', 'Consultant', 'Marketing Manager'],
     'Data Science': ['Data Analyst', 'Data Engineer', 'ML Engineer', 'Research Scientist'],
-    'Engineering': ['Systems Engineer', 'Quality Engineer', 'Technical Lead', 'Solutions Architect']
+    'Engineering': ['Systems Engineer', 'Quality Engineer', 'Technical Lead', 'Solutions Architect'],
+    'Mathematics': ['Data Scientist', 'Research Scientist', 'Data Analyst', 'ML Engineer'],
+    'Information Technology': ['Software Engineer', 'Cloud Architect', 'DevOps Engineer', 'Cybersecurity Analyst'],
+    'Other': ['Data Analyst', 'Business Analyst', 'Project Manager']
   };
 
-  const primaryRole = careerRoles[input.degree]?.[0] || 'Software Engineer';
-  const alternatives = careerRoles[input.degree]?.slice(1, 4) || ['Data Analyst', 'Business Analyst'];
+  const primaryRole = careerRoles[input.degree]?.[0] || 'Data Analyst';
+  const alternatives = careerRoles[input.degree]?.slice(1, 4) || ['Business Analyst', 'Project Manager'];
 
   const requiredSkills = {
     'Software Engineer': ['JavaScript', 'Python', 'Git', 'Docker', 'SQL', 'REST APIs', 'Agile'],
-    'Data Scientist': ['Python', 'Machine Learning', 'Statistics', 'SQL', 'Data Visualization', 'TensorFlow'],
-    'Product Manager': ['Product Strategy', 'Agile', 'Stakeholder Management', 'Analytics', 'UX Design']
+    'Data Scientist': ['Python', 'Machine Learning', 'Statistics', 'SQL', 'Data Visualization', 'TensorFlow', 'Mathematics'],
+    'Product Manager': ['Product Strategy', 'Agile', 'Stakeholder Management', 'Analytics', 'UX Design'],
+    'Research Scientist': ['Research', 'Python', 'Machine Learning', 'Statistics', 'Mathematics', 'Deep Learning'],
+    'Data Analyst': ['SQL', 'Excel', 'Data Visualization', 'Python', 'Statistics', 'Reporting'],
+    'Business Analyst': ['SQL', 'Excel', 'Requirements Gathering', 'Data Analysis', 'Communication']
   };
 
   const roleSkills = requiredSkills[primaryRole] || ['JavaScript', 'Python', 'Git'];
