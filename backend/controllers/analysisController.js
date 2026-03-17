@@ -29,9 +29,20 @@ exports.createAnalysis = async (req, res) => {
     // Call ML service for prediction
     let mlResponse;
     try {
-      mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/api/predict`, mlPayload);
+      console.log(`Attempting to reach ML Service at: ${process.env.ML_SERVICE_URL}/api/predict`);
+      mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/api/predict`, mlPayload, {
+        timeout: 10000 // 10 second timeout for cold starts
+      });
     } catch (mlError) {
-      console.error('ML Service Error:', mlError.message);
+      console.error('--- ML SERVICE CONNECTION ERROR ---');
+      console.error('Message:', mlError.message);
+      if (mlError.response) {
+        console.error('Data:', mlError.response.data);
+        console.error('Status:', mlError.response.status);
+      } else if (mlError.request) {
+        console.error('No response received (Timeout or Network Error). Request:', mlError.request._currentUrl);
+      }
+      console.error('-----------------------------------');
       
       // Fallback to mock prediction if ML service is unavailable
       mlResponse = {
