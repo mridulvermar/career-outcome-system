@@ -13,6 +13,11 @@ import {
   CircularProgress,
   Alert,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import {
   Delete,
@@ -39,6 +44,9 @@ function Dashboard() {
     highConfidence: 0,
     avgSkillMatch: 0,
   });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [analysisToDelete, setAnalysisToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetchAnalyses();
@@ -67,15 +75,25 @@ function Dashboard() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this analysis?')) {
-      try {
-        await analysisAPI.delete(id);
-        toast.success('Analysis deleted successfully');
-        fetchAnalyses();
-      } catch (error) {
-        toast.error('Failed to delete analysis');
-      }
+  const handleDeleteClick = (id) => {
+    setAnalysisToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!analysisToDelete) return;
+
+    setDeleting(true);
+    try {
+      await analysisAPI.delete(analysisToDelete);
+      toast.success('Analysis deleted successfully');
+      setDeleteDialogOpen(false);
+      setAnalysisToDelete(null);
+      fetchAnalyses();
+    } catch (error) {
+      toast.error('Failed to delete analysis');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -218,7 +236,7 @@ function Dashboard() {
                     <IconButton
                       size="small"
                       sx={{ color: 'text.disabled', '&:hover': { color: 'error.main' } }}
-                      onClick={() => handleDelete(analysis._id)}
+                      onClick={() => handleDeleteClick(analysis._id)}
                     >
                       <Delete fontSize="small" />
                     </IconButton>
@@ -274,6 +292,49 @@ function Dashboard() {
           ))}
         </Grid>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => !deleting && setDeleteDialogOpen(false)}
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            p: 1,
+            minWidth: 320,
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          }
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 'bold', pb: 1 }}>
+          Confirm Deletion
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText color="text.secondary">
+            Are you sure you want to delete this analysis? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ p: 2, pt: 1 }}>
+          <Button 
+            onClick={() => setDeleteDialogOpen(false)} 
+            color="inherit" 
+            disabled={deleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmDelete}
+            variant="contained"
+            color="error"
+            autoFocus
+            disabled={deleting}
+            startIcon={deleting ? <CircularProgress size={20} color="inherit" /> : <Delete />}
+            sx={{ borderRadius: 2, px: 3 }}
+          >
+            {deleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </MotionContainer>
   );
 }
