@@ -24,12 +24,12 @@ A full-stack web application that uses Machine Learning to predict career outcom
 ## 🏗️ Architecture
 
 ```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│                 │     │                  │     │                 │
-│  React Frontend │────▶│  Express Backend │────▶│  Flask ML API   │
-│  (Port 3000)    │     │  (Port 5000)     │     │  (Port 5001)    │
-│                 │     │                  │     │                 │
-└─────────────────┘     └──────────────────┘     └─────────────────┘
+┌─────────────────┐     ┌──────────────────┐  
+│                 │     │                  │
+│  React Frontend │────▶│  Express Backend │
+│  (Port 3000)    │     │  (Port 5000)     │     
+│                 │     │                  │     
+└─────────────────┘     └──────────────────┘     
                                │
                                ▼
                         ┌──────────────┐
