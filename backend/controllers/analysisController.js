@@ -31,7 +31,7 @@ exports.createAnalysis = async (req, res) => {
     try {
       console.log(`Attempting to reach ML Service at: ${process.env.ML_SERVICE_URL}/api/predict`);
       mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/api/predict`, mlPayload, {
-        timeout: 10000 // 10 second timeout for cold starts
+        timeout: 30000 // 30 second timeout for cold starts (increased from 10s)
       });
     } catch (mlError) {
       console.error('--- ML SERVICE CONNECTION ERROR ---');
@@ -40,7 +40,7 @@ exports.createAnalysis = async (req, res) => {
         console.error('Data:', mlError.response.data);
         console.error('Status:', mlError.response.status);
       } else if (mlError.request) {
-        console.error('No response received (Timeout or Network Error). Request:', mlError.request._currentUrl);
+        console.error('No response received (Timeout or Network Error). URL attempted:', `${process.env.ML_SERVICE_URL}/api/predict`);
       }
       console.error('-----------------------------------');
       
