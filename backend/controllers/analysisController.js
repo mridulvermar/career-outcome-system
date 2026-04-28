@@ -31,7 +31,7 @@ exports.createAnalysis = async (req, res) => {
     try {
       console.log(`Attempting to reach ML Service at: ${process.env.ML_SERVICE_URL}/api/predict`);
       mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/api/predict`, mlPayload, {
-        timeout: 30000 // 30 second timeout for cold starts (increased from 10s)
+        timeout: 60000 // 60 second timeout for cold starts on Render (increased from 30s)
       });
     } catch (mlError) {
       console.error('--- ML SERVICE CONNECTION ERROR ---');

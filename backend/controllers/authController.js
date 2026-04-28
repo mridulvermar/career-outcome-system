@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { getSignedJwtToken } = require('../middleware/auth');
+const axios = require('axios');
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -34,6 +35,15 @@ exports.register = async (req, res) => {
 
     // Create token
     const token = getSignedJwtToken(user._id);
+
+    // Ping ML service to wake it up (fire and forget)
+    try {
+      if (process.env.ML_SERVICE_URL) {
+        axios.get(`${process.env.ML_SERVICE_URL}/api/health`, { timeout: 5000 }).catch(e => console.log('ML service ping initiated...'));
+      }
+    } catch (e) {
+      console.log('Error initiating ML service ping');
+    }
 
     res.status(201).json({
       success: true,
@@ -91,6 +101,15 @@ exports.login = async (req, res) => {
 
     // Create token
     const token = getSignedJwtToken(user._id);
+
+    // Ping ML service to wake it up (fire and forget)
+    try {
+      if (process.env.ML_SERVICE_URL) {
+        axios.get(`${process.env.ML_SERVICE_URL}/api/health`, { timeout: 5000 }).catch(e => console.log('ML service ping initiated...'));
+      }
+    } catch (e) {
+      console.log('Error initiating ML service ping');
+    }
 
     res.status(200).json({
       success: true,
