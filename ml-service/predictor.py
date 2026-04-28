@@ -7,6 +7,7 @@ from data_constants import (
     SALARY_DATA, EXTENDED_SKILL_MAPPING, SKILL_SYNONYMS, 
     DEGREE_MAP, MAX_SKILLS_TO_CHECK
 )
+from tfidf_recommender import TfidfRecommender
 
 class CareerPredictor:
     def __init__(self, model_path='models/'):
@@ -16,6 +17,7 @@ class CareerPredictor:
         self.role_encoder = None
         self.skills_encoder = None
         self.skill_role_mapping = {}
+        self.recommender = TfidfRecommender()
         self._load_models()
 
     def _load_models(self):
@@ -99,94 +101,38 @@ class CareerPredictor:
         
         return 0
 
-    def predict_with_enhanced_rules(self, degree, skills, experience):
-        """Improved Rule-based prediction logic"""
-        normalized_degree = 'Other'
-        best_degree_match = 0
-        for deg_key in DEGREE_MAP.keys():
-            similarity = self.match_skill_with_synonyms(degree, deg_key)
-            if similarity > best_degree_match:
-                best_degree_match = similarity
-                if similarity > 70:
-                    normalized_degree = deg_key
+    def predict_with_tfidf(self, degree, skills, experience):
+        """TF-IDF and Cosine Similarity based prediction logic"""
+        # Generate recommendations based on user skills
+        recommendations = self.recommender.recommend(skills, top_n=4)
         
-        degree_based_roles = DEGREE_MAP.get(normalized_degree, DEGREE_MAP['Other'])
-        all_possible_roles = list(EXTENDED_SKILL_MAPPING.keys())
-        candidate_roles = list(set(degree_based_roles + all_possible_roles))
-        
-        role_scores = []
-        for role in candidate_roles:
-            required_skills_for_role = EXTENDED_SKILL_MAPPING.get(role, [])
-            if not required_skills_for_role and self.skill_role_mapping and role in self.skill_role_mapping:
-                 required_skills_for_role = list(self.skill_role_mapping[role].keys())
-            
-            required_skills_for_role = required_skills_for_role[:MAX_SKILLS_TO_CHECK]
-            weighted_required_skills = []
-            for i, skill in enumerate(required_skills_for_role):
-                weight = 1.0
-                if i < 3: weight = 3.0
-                elif i < 7: weight = 2.0
-                elif i < 12: weight = 1.2
-                weighted_required_skills.append((skill, weight))
-
-            current_role_score = 0
-            matched_skills_count = 0
-            for req_skill, weight in weighted_required_skills:
-                best_match_score = 0
-                for user_skill in skills:
-                    similarity = self.match_skill_with_synonyms(user_skill, req_skill)
-                    if similarity > best_match_score:
-                        best_match_score = similarity
-                
-                if best_match_score >= 70:
-                    current_role_score += (best_match_score / 100.0) * weight
-                    matched_skills_count += 1
-            
-            if role in degree_based_roles:
-                current_role_score += 2.0
-            
-            if experience > 0:
-                current_role_score += min(experience * 0.3, 3)
-                
-            total_possible_weighted_score = sum(w for _, w in weighted_required_skills)
-            normalized_score = (current_role_score / total_possible_weighted_score * 100) if total_possible_weighted_score > 0 else 0
-                
-            role_scores.append({
-                'role': role,
-                'score': normalized_score,
-                'matched_skills_count': matched_skills_count,
-                'total_required_skills': len(required_skills_for_role)
-            })
-        
-        role_scores.sort(key=lambda x: x['score'], reverse=True)
-        
-        if not role_scores:
+        if not recommendations:
             predicted_role = "Generalist"
             confidence = 0.1
+            alternatives = []
         else:
-            best_match = role_scores[0]
+            best_match = recommendations[0]
             predicted_role = best_match['role']
-            confidence = min(max(best_match['score'] / 100.0, 0.15), 0.95)
+            confidence = best_match['matchScore'] / 100.0
             
+            # Boost confidence slightly based on experience if it's already a good match
             if experience >= 5 and confidence > 0.6:
                 confidence = min(confidence * 1.1, 0.99)
             elif experience < 1 and confidence < 0.4:
                 confidence = max(confidence * 0.8, 0.15)
+                
+            alternatives = []
+            for item in recommendations[1:]:
+                alt_prob = item['matchScore'] / 100.0
+                alternatives.append({
+                    'role': item['role'],
+                    'probability': float(f"{alt_prob:.2f}"),
+                    'matchScore': item['matchScore']
+                })
 
         salary_info = SALARY_DATA.get(predicted_role, {'min': 400000, 'max': 1000000, 'avg': 700000})
         exp_mult = 0.8 if experience <= 1 else 1.0 if experience <= 3 else 1.5 if experience <= 6 else 2.2 if experience <= 10 else 3.0
             
-        alternatives = []
-        for item in role_scores[1:4]:
-            if item['score'] > 20:
-                alt_prob = (item['score'] / 100.0) * (item['matched_skills_count'] / max(item['total_required_skills'], 1))
-                alt_prob = min(max(alt_prob, 0.1), 0.8)
-                alternatives.append({
-                    'role': item['role'],
-                    'probability': float(f"{alt_prob:.2f}"),
-                    'matchScore': int(item['score'])
-                })
-
         return {
             'careerRole': predicted_role,
             'probability': float(f"{confidence:.2f}"),
@@ -302,9 +248,8 @@ class CareerPredictor:
 
     def predict(self, degree, skills, experience):
         """Main prediction entry point"""
-        # For now, we use rule-based logic primarily as per user request to ignore model for now
-        # But the architecture supports both.
-        prediction_result = self.predict_with_enhanced_rules(degree, skills, experience)
+        # Uses the new TF-IDF engine instead of the old rule-based fallback
+        prediction_result = self.predict_with_tfidf(degree, skills, experience)
         
         skill_gap = self.analyze_skill_gap(
             skills, 

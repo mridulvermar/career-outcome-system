@@ -83,7 +83,7 @@ def test_job_matching():
         print(f"  Experience: {test['experience']} years")
         
         try:
-            result = predictor.predict_with_enhanced_rules(
+            result = predictor.predict_with_tfidf(
                 test['degree'],
                 test['skills'],
                 test['experience']

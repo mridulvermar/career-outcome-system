@@ -56,7 +56,7 @@ const analysisSchema = new mongoose.Schema({
       average: Number,
       currency: {
         type: String,
-        default: 'USD'
+        default: 'INR'
       }
     },
     alternativeCareers: [{

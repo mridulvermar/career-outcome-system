@@ -57,8 +57,6 @@ function Dashboard() {
       const response = await analysisAPI.getHistory({ limit: 20 });
       const data = response.data.data;
       setAnalyses(data);
-
-      // Calculate stats
       const total = data.length;
       const highConfidence = data.filter(a => a.prediction.confidence === 'High').length;
       const avgSkillMatch = data.reduce((sum, a) => sum + a.skillGap.overallMatch, 0) / (total || 1);
